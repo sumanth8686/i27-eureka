@@ -6,8 +6,8 @@ pipeline {
         APPLICATION_NAME: "Eureka"
     }
     tools {
-        Maven 'Maven-3.8.8'
-        Jdk 'JDK-17'
+        maven 'Maven-3.8.8'
+        jdk 'JDK-17'
     }
     stages {
         stage ('Build') {

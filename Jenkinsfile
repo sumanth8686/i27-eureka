@@ -3,7 +3,7 @@ pipeline {
         label 'k8s-slave'
     }
     environment {
-        APPLICATION_NAME: "Eureka"
+        APPLICATION_NAME = "Eureka"
     }
     tools {
         maven 'Maven-3.8.8'

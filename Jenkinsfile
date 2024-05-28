@@ -18,5 +18,11 @@ pipeline {
                  
             }
         }
+        stage ('Unit Tests') {
+            steps {
+                echo "Performing Unit tests for ${env.APPLICATION_NAME} application"
+                sh "mvn test"
+            }
+        }
     }
 }

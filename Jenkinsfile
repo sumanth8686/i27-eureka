@@ -40,7 +40,7 @@ pipeline {
 
     stage ('test') {
       steps {
-        echo "Jar dest: ${env.APPLICATION_NAME}-${currentBuild.number}-${BRANCH_NAME}"
+        echo "Jar dest: ${env.APPLICATION_NAME}-${currentBuild.number}-${BRANCH_NAME}.${env.POM_PACKAGING}"
       }
     }
     

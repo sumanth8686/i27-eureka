@@ -32,7 +32,7 @@ pipeline {
       }
     }
 
-    stage ('Docker-Format') {
+    stage ('Docker Format') {
       steps {
         echo "JAR Source: ${env.APPLICATION_NAME}-${env.POM_VERSION}-${env.POM_PACKAGING}"
       }

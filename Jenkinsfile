@@ -40,7 +40,7 @@ pipeline {
 
     stage ('test') {
       steps {
-        echo "hello_world"
+        echo "Jar dest: ${env.APPLICATION_NAME}-${currentBuild.number}-${BRANCH_NAME}"
       }
     }
     

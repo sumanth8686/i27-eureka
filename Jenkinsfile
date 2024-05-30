@@ -7,7 +7,7 @@ pipeline {
     APPLICATION_NAME = "eureka"
     POM_VERSION = readMavenPom().getVersion()
     POM_PACKAGING = readMavenPom().getPackaging()
-    DOCKER_HUB = "docker.io/i27devopsb2"
+    DOCKER_HUB = "docker.io/sumanth9677"
     DOCKER_CREDS = credentials('sumanth9677_docker_creds')
     
   }

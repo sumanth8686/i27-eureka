@@ -59,5 +59,3 @@ pipeline {
     
   }
 }
-
-/home/sumanth9677/jenkins/workspace/i27-Eureka_master/target/i27-eureka-0.0.1-SNAPSHOT.jar

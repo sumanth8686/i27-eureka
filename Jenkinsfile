@@ -7,6 +7,8 @@ pipeline {
     APPLICATION_NAME = "eureka"
     POM_VERSION = readMavenPom().getVersion()
     POM_PACKAGING = readMavenPom().getPackaging()
+    DOCKER_HUB = "docker.io/i27devopsb2"
+    
   }
   tools {
     maven 'Maven-3.8.8'
@@ -50,7 +52,8 @@ pipeline {
               ls -la
               cp ${workspace}/target/i27-${env.APPLICATION_NAME}-${env.POM_VERSION}.${env.POM_PACKAGING} ./.cicd
               ls -la ./.cicd
-
+              echo "*********************** Build Docker Image *******************************************"
+              docker build -t ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT} ./.cicd
 
             """
         }

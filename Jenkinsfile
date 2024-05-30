@@ -3,7 +3,7 @@ pipeline {
   agent {
     label 'k8s-slave'
   }
-  environments {
+  environment {
     APPLICATION_NAME = "eureka"
     POM_VERSION = readMavenPom().getVersion()
     POM_PACKAGING = readMavenPom().getPackaging()

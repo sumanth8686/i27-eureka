@@ -58,7 +58,7 @@ pipeline {
               echo "*********************** Docker login *******************************************"
               docker login ${env.DOCKER_HUB} -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}
               echo "*********************** Docker push *******************************************"
-              docker push docker.io/sumanth9677/i27devopsb2:${GIT_COMMIT}
+              docker push ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT}
               """
         }
     }

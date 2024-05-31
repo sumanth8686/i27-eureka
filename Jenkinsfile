@@ -52,9 +52,9 @@ pipeline {
             sh """
               ls -la
               cp ${workspace}/target/i27-${env.APPLICATION_NAME}-${env.POM_VERSION}.${env.POM_PACKAGING} ./.cicd
-*******"
-              docker build --force-rm --no-cache --pull --rm=true f--build-arg JAR_SOURCE=i27-${env.APPLICATION_NAM              ls -la ./.cicd
-              echo "*********************** Build Docker Image ************************************E}-${env.POM_VERSION}.${env.POM_PACKAGING} -t ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT} ./.cicd
+              ls -la ./.cicd
+              echo "*********************** Build Docker Image *******************************************"
+              docker build --force-rm --no-cache --pull --rm=true --build-arg JAR_SOURCE=i27-${env.APPLICATION_NAME}-${env.POM_VERSION}.${env.POM_PACKAGING} -t ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT} ./.cicd
               echo "*********************** Docker login *******************************************"
               docker login -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}
               echo "*********************** Docker push *******************************************"

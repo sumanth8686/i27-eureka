@@ -1,10 +1,3 @@
-#code copied from sonar server
-## mvn clean verify sonar:sonar \
-  -Dsonar.projectKey=i27-eureka \
-  -Dsonar.host.url=http://34.125.222.46:9000 \
-  -Dsonar.login=sqp_0da32b2f4582894d80f2fdf009a5a809010645cf
-
-
 // This Jenkinsfile is for the eureka deployment
 pipeline {
   agent {

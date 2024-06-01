@@ -10,7 +10,7 @@ pipeline {
     DOCKER_HUB = "docker.io/sumanth9677"
     DOCKER_CREDS = credentials('sumanth9677_docker_creds')
     SONAR_URL = "http://34.125.222.46:9000"
-    SONAR_TOKEN = cred('sonar_creds')
+    SONAR_TOKEN = credentials('sonar_creds')
     
   }
   tools {

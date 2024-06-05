@@ -49,9 +49,9 @@ pipeline {
 
         """
         }
-        timeout (time: 2, unit: 'MINUTES') // wait for 2min
-          script {
-            waitForQualityGate abortPipeline: true // if no respose, fail the gate
+         timeout (time: 2, unit: 'MINUTES') // wait for 2min
+           script {
+             waitForQualityGate abortPipeline: true // if no respose, fail the gate
           }
     }
     }

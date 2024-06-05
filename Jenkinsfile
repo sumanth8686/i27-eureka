@@ -90,7 +90,7 @@ pipeline {
             echo "*********************** Deploying to Dev Env *******************************************"
             withCredentials([usernamePassword(credentialsId: 'maha_dockerenv_creds', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
             // with the help of this block,slave will connect docker server to execute commands
-            sshpass -p ssh -o StrictHostKeyChecking user@host command_to_run
+            // usshpass -p ssh -o StrictHostKeyChecking user@host command_to_run
             sh "sshpass -p ${PASSWORD} -v ${USERNAME}@{docker_server_ip} hostname -i"
 
         }

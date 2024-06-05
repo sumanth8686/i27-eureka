@@ -40,7 +40,7 @@ pipeline {
     stage ('sonar') {
       steps {
         echo "Starting SonarQube with QualityGates"
-        withSonarQubeEnv('SonarQube') // this name should be same as manage jenkins > system details
+        withSonarQubeEnv('SonarQube'){ // this name should be same as manage jenkins > system details
           sh """
             mvn clean verify sonar:sonar \
               -Dsonar.projectKey=i27-eureka \
@@ -53,6 +53,7 @@ pipeline {
           script {
             waitForQualityGate abortPipeline: true // if no respose, fail the gate
           }
+    }
     }
 
     stage ('Docker Format') {

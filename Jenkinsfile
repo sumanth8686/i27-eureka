@@ -38,15 +38,21 @@ pipeline {
     }
 
     stage ('sonar') {
-        steps {
-            sh """
-            echo "starting sonar scan"
+      steps {
+        echo "Starting SonarQube with QualityGates"
+        withSonarQubeEnv('SonarQube') // this name should be same as manage jenkins > system details
+          sh """
             mvn clean verify sonar:sonar \
-             -Dsonar.projectKey=i27-eureka \
-             -Dsonar.host.url=${env.SONAR_URL} \
-             -Dsonar.login=${SONAR_TOKEN}
-            """
+              -Dsonar.projectKey=i27-eureka \
+              -Dsonar.host.url=${env.SONAR_URL} \
+              -Dsonar.login=${SONAR_TOKEN}
+
+        """
         }
+        timeout (time: 2, unit: 'MINUTES') // wait for 2min
+          script {
+            waitForQualityGate abortPipeline: true // if no respose, fail the gate
+          }
     }
 
     stage ('Docker Format') {
@@ -80,3 +86,5 @@ pipeline {
     
   }
 }
+
+

@@ -89,7 +89,7 @@ pipeline {
         steps {
             echo "*********************** Deploying to Dev Env *******************************************"
             withCredentials([usernamePassword(credentialsId: 'maha_dockerenv_creds', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-            sh "sshpass -p ${PASSWORD} -v ${USERNAME}@{docker_server_ip} hostname -i"
+            sh "sshpass -p ${PASSWORD} -v ${USERNAME}@{docker_server_ip} whoami"
 
         }
     }

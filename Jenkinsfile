@@ -89,7 +89,8 @@ pipeline {
         steps {
             echo "*********************** Deploying to Dev Env *******************************************"
             withCredentials([usernamePassword(credentialsId: 'maha_dockerenv_creds', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-            sh "sshpass -p ${PASSWORD} -v ssh -o StrictHostKeyChecking=no ${USERNAME}@${docker_server_ip} hostname -i"
+            //sh "sshpass -p ${PASSWORD} -v ssh -o StrictHostKeyChecking=no ${USERNAME}@${docker_server_ip} hostname -i"
+            sh "sshpass -p ${PASSWORD} -v ssh -o StrictHostKeyChecking=no ${USERNAME}@${docker_server_ip} docker pull ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT}"
 
         }
     }

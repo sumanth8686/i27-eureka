@@ -69,7 +69,7 @@ pipeline {
       }
     }
     
-    stage ('docker build') {
+    stage ('docker build & push') {
         steps {
             sh """
               ls -la
@@ -85,7 +85,7 @@ pipeline {
         }
     }
 
-    stage ('deploying to ') {
+    stage ('deploying to dev') {
         steps {
             echo "*********************** Deploying to Dev Env *******************************************"
             withCredentials([usernamePassword(credentialsId: 'maha_dockerenv_creds', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
@@ -120,6 +120,48 @@ pipeline {
             //creating container
             echo "**********creating container***********"
             sh "sshpass -p ${PASSWORD} -v ssh -o StrictHostKeyChecking=no ${USERNAME}@${docker_server_ip} docker run -d -p 5761:8761 --name ${env.APPLICATION_NAME}-dev  ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT}"
+
+            
+
+
+        }
+    }
+
+    stage ('deploying to test') {
+        steps {
+            echo "*********************** Deploying to test Env *******************************************"
+            withCredentials([usernamePassword(credentialsId: 'maha_dockerenv_creds', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+            //sh "sshpass -p ${PASSWORD} -v ssh -o StrictHostKeyChecking=no ${USERNAME}@${docker_server_ip} hostname -i"
+
+            script {
+              //pull container
+              sh "sshpass -p ${PASSWORD} -v ssh -o StrictHostKeyChecking=no ${USERNAME}@${docker_server_ip} docker pull ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT}"
+
+              try {
+                //stop container  //when there is a code change, we cannot create container with same name
+                echo "stopping the container"
+                sh "sshpass -p ${PASSWORD} -v ssh -o StrictHostKeyChecking=no ${USERNAME}@${docker_server_ip} docker stop ${env.APPLICATION_NAME}-tst"
+
+                //remove container
+                echo "removing the container"
+                sh "sshpass -p ${PASSWORD} -v ssh -o StrictHostKeyChecking=no ${USERNAME}@${docker_server_ip} docker rm ${env.APPLICATION_NAME}-tst"
+
+
+
+              } catch(err) {
+                echo "Caught the error: $err"
+              }
+
+
+
+          } 
+            
+            
+            //now we will create a container, eureka runs at 8761 port defined by developer
+            //we will configure env's such that dev=>5761(host port),test=>6761,stage=>7761,prod=>8761
+            //creating container
+            echo "**********creating container***********"
+            sh "sshpass -p ${PASSWORD} -v ssh -o StrictHostKeyChecking=no ${USERNAME}@${docker_server_ip} docker run -d -p 6761:8761 --name ${env.APPLICATION_NAME}-tst  ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT}"
 
             
 

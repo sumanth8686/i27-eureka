@@ -126,7 +126,8 @@ pipeline {
 
         }
     }
-
+    
+    }
     stage ('deploying to test') {
         steps {
             echo "*********************** Deploying to test Env *******************************************"
@@ -168,10 +169,6 @@ pipeline {
 
         }
     }
-    
-    
-  }
 }
 }
-
 }

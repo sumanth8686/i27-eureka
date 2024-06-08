@@ -118,6 +118,7 @@ pipeline {
             //now we will create a container, eureka runs at 8761 port defined by developer
             //we will configure env's such that dev=>5761(host port),test=>6761,stage=>7761,prod=>8761
             //creating container
+            echo "**********creating container***********"
             sh "sshpass -p ${PASSWORD} -v ssh -o StrictHostKeyChecking=no ${USERNAME}@${docker_server_ip} docker run -d -p 5761:8761 --name ${env.APPLICATION_NAME}-dev  ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT}"
 
             

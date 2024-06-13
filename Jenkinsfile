@@ -103,7 +103,7 @@ pipeline {
           script{
             echo "*************entering into tst env*************"
             dockerDeploy('tst', '6761', '8761').call()
-    }
+  }
 }
 }
     stage ('deploying to stage') {
@@ -118,10 +118,10 @@ pipeline {
         steps {
           script{
             dockerDeploy('prod', '8761', '8761').call()
+      }
     }
-}
-}
-}
+  }
+ }
 }
 
 

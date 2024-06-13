@@ -184,9 +184,9 @@ pipeline {
           script{
             echo "*************entering into tst env*************"
             dockerDeploy('tst', '6761', '8761').call()
-  }
-}
-}
+     }
+    }
+   }
     stage ('deploying to stage') {
       when {
         expression {
@@ -197,8 +197,8 @@ pipeline {
           script{
             dockerDeploy('stage', '7761', '8761').call()
     }
-}
-}
+   }
+  }
 
     stage ('deploying to prod') {
       when {
@@ -213,6 +213,14 @@ pipeline {
             dockerDeploy('prod', '8761', '8761').call()
       }
     }
+  }
+  stag (clean) {
+    steps {
+      cleanWs()
+
+    }
+
+
   }
 }
 }

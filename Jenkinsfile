@@ -61,8 +61,8 @@ pipeline {
         }
       }
       steps {
-        echo "buiding the ${env.APPLICATION_NAME} application"
-        sh 'mvn clean package -DskipTests=true'  
+        buildApp().call()
+      //calling from method 
         
       }
     }
@@ -227,6 +227,11 @@ pipeline {
 
 
 
+//this method will build image and push to registry
+def dockerBuildandPush(){
+  return
+}
+
 
 def dockerDeploy(envDeploy, hostPort, contPort) {
       return {
@@ -268,6 +273,25 @@ def dockerDeploy(envDeploy, hostPort, contPort) {
         
 
     }
+}
+
+def imageValidation() {
+  println ("pulling the docker image")
+  try {
+    sh "docker pull ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT}"
+  }
+  catch (exeption e) {  
+      println("oops!, docker images with this tag is not available")
+      buildApp().call()
+
+  }
+}
+
+def buildApp() {
+  return {
+    echo "building  the ${env.APPLICATION_NAME} application"
+    sh 'mvn clean package -DskipTests=true'
+  }
 }
             
 

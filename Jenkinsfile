@@ -88,7 +88,7 @@ pipeline {
     stage ('deploying to dev') {
       steps {
         script {
-          dockerDeploy('dev', '5761', '8761').call
+          dockerDeploy('dev', '5761', '8761').call()
           echo "************deployed to dev successfully***************"
 
 

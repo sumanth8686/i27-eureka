@@ -124,7 +124,7 @@ pipeline {
 }
 
 
- def dockerDeploy()(envDeploy, hostPort, contPort) {
+ def dockerDeploy(envDeploy, hostPort, contPort) {
        return {
             echo "*********************** Deploying to $envDeploy Env *******************************************"
             withCredentials([usernamePassword(credentialsId: 'maha_dockerenv_creds', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {

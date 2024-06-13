@@ -214,7 +214,7 @@ pipeline {
       }
     }
   }
-  stag (clean) {
+  stage (clean) {
     steps {
       cleanWs()
 

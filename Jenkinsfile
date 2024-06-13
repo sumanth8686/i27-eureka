@@ -5,30 +5,34 @@ pipeline {
   }
 
   parameters {
-    choice(name: 'buildOnly') {
-      choices: 'no\nyes'
+    choice(name: 'buildOnly', 
+      choices: 'no\nyes',
       description: 'this will only build the application'
-    }
-    choice(name: 'scanOnly') {
-      choices: 'no\nyes'
+    )
+    
+    choice(name: 'scanOnly',
+      choices: 'no\nyes',
       description: 'this will only scan the application'
-    }
-    choice(name: 'dockerPush') {
-      choices: 'no\nyes'
+    )
+    
+    choice(name: 'dockerPush' ,
+      choices: 'no\nyes',
       description: 'this will only scan the application'
-    }
-    choice(name: 'deploytoDev') {
-      choices: 'no\nyes'
+    )
+    choice(name: 'deploytoDev',
+      choices: 'no\nyes',
       description: 'this will only scan the application'
-    }
-    choice(name: 'deploytoTest') {
-      choices: 'no\nyes'
+    )
+    
+    choice(name: 'deploytoTest',
+      choices: 'no\nyes',
       description: 'this will only scan the application'
-    }
-    choice(name: 'deploytoStage') {
-      choices: 'no\nyes'
+    )
+    choice(name: 'deploytoStage',
+      choices: 'no\nyes',
       description: 'this will only scan the application'
-    }
+    )
+    
   }
 
 

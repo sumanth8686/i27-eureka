@@ -75,16 +75,16 @@ pipeline {
           }
         }
       }
-    }
-      steps {
-        echo "Performing unit test for ${env.APPLICATION_NAME} application"
-        sh 'mvn test'
-      }
-      post {
-        always {
-            junit 'target/surefire-reports/*.xml'
+        steps {
+          echo "Performing unit test for ${env.APPLICATION_NAME} application"
+          sh 'mvn test'
         }
-      }
+        post {
+          always {
+              junit 'target/surefire-reports/*.xml'
+          }
+        }
+    }
     
 
     stage ('sonar') {
@@ -93,19 +93,17 @@ pipeline {
           params.scanOnly == 'yes'
         }
        
-          }
-        
       }
-      steps {
-        echo "Starting SonarQube with QualityGates"
-        withSonarQubeEnv('SonarQube'){ // this name should be same as manage jenkins > system details
-          sh """
-            mvn clean verify sonar:sonar \
-              -Dsonar.projectKey=i27-eureka \
-              -Dsonar.host.url=${env.SONAR_URL} \
-              -Dsonar.login=${SONAR_TOKEN}
+       steps {
+         echo "Starting SonarQube with QualityGates"
+         withSonarQubeEnv('SonarQube'){ // this name should be same as manage jenkins > system details
+           sh """
+             mvn clean verify sonar:sonar \
+               -Dsonar.projectKey=i27-eureka \
+               -Dsonar.host.url=${env.SONAR_URL} \
+               -Dsonar.login=${SONAR_TOKEN}
 
-        """
+         """
         }
         timeout (time: 2, unit: 'MINUTES') { // wait for 2min
           script {
@@ -113,6 +111,9 @@ pipeline {
           }
          }
     }
+        
+  }
+      
     }
 
     /*stage ('Docker Format') {
@@ -150,24 +151,30 @@ pipeline {
 
     stage ('deploying to dev') {
       when {
-          params.deploytoDev == 'yes'
+          expression {
+             params.deploytoDev == 'yes'
+          }
+         
         }
       
-      steps {
-        script {
-          dockerDeploy('dev', '5761', '8761').call()
-          echo "************deployed to dev successfully***************"
+          steps {
+            script {
+              dockerDeploy('dev', '5761', '8761').call()
+              echo "************deployed to dev successfully***************"
 
 
-        }
-      }
+            }
+          }
         
     }
     
 
     stage ('deploying to test') {
       when {
+        expression {
           params.deploytoTest == 'yes'
+        }
+          
       }
         
         steps {
@@ -179,7 +186,9 @@ pipeline {
 }
     stage ('deploying to stage') {
       when {
-          params.deploytoStage == 'yes'
+        expression {
+           params.deploytoStage == 'yes'
+       }
       }
         steps {
           script{
@@ -190,7 +199,11 @@ pipeline {
 
     stage ('deploying to prod') {
       when {
+        expression {
           params.deploytoProd == 'yes'
+
+        }
+        
       }
         steps {
           script{
@@ -198,7 +211,8 @@ pipeline {
       }
     }
   }
- }
+}
+
 
 
 

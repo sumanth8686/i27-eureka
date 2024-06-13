@@ -131,7 +131,10 @@ pipeline {
     stage ('docker build & push') {
       when {
         anyOf {
-          params.dockerPush == 'yes'
+          expression {
+            params.dockerPush == 'yes'
+          }
+        
         }
       }
         steps {

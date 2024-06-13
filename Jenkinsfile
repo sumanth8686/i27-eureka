@@ -85,7 +85,10 @@ pipeline {
 
     stage ('sonar') {
       when {
-        params.scanOnly == 'yes'
+        expression {
+          params.scanOnly == 'yes'
+        }
+       
           }
         
       }

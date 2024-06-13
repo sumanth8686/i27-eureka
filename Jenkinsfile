@@ -114,7 +114,7 @@ pipeline {
         
   }
       
-    }
+
 
     /*stage ('Docker Format') {
       steps {
@@ -211,6 +211,7 @@ pipeline {
       }
     }
   }
+}
 }
 
 

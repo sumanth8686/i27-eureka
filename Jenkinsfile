@@ -3,6 +3,35 @@ pipeline {
   agent {
     label 'k8s-slave'
   }
+
+  parameters {
+    choice(name: 'buildOnly') {
+      choices: 'no\nyes'
+      description: 'this will only build the application'
+    }
+    choice(name: 'scanOnly') {
+      choices: 'no\nyes'
+      description: 'this will only scan the application'
+    }
+    choice(name: 'dockerPush') {
+      choices: 'no\nyes'
+      description: 'this will only scan the application'
+    }
+    choice(name: 'deploytoDev') {
+      choices: 'no\nyes'
+      description: 'this will only scan the application'
+    }
+    choice(name: 'deploytoTest') {
+      choices: 'no\nyes'
+      description: 'this will only scan the application'
+    }
+    choice(name: 'deploytoStage') {
+      choices: 'no\nyes'
+      description: 'this will only scan the application'
+    }
+  }
+
+
   environment {
     APPLICATION_NAME = "eureka"
     POM_VERSION = readMavenPom().getVersion()
@@ -19,6 +48,14 @@ pipeline {
   }
   stages {
     stage ('Build') {
+      when {
+        anyOf {
+          expression {
+            params.buildOnly == 'yes'
+            params.dockerPush == 'yes'
+          }
+        }
+      }
       steps {
         echo "buiding the ${env.APPLICATION_NAME} application"
         sh 'mvn clean package -DskipTests=true'  
@@ -26,6 +63,15 @@ pipeline {
       }
     }
     stage ('unit-tests') {
+       when {
+        anyOf {
+          expression {
+            params.buildOnly == 'yes'
+            params.dockerPush == 'yes'
+          }
+        }
+      }
+    }
       steps {
         echo "Performing unit test for ${env.APPLICATION_NAME} application"
         sh 'mvn test'
@@ -35,9 +81,14 @@ pipeline {
             junit 'target/surefire-reports/*.xml'
         }
       }
-    }
+    
 
     stage ('sonar') {
+      when {
+        params.scanOnly == 'yes'
+          }
+        
+      }
       steps {
         echo "Starting SonarQube with QualityGates"
         withSonarQubeEnv('SonarQube'){ // this name should be same as manage jenkins > system details
@@ -57,11 +108,11 @@ pipeline {
     }
     }
 
-    stage ('Docker Format') {
+    /*stage ('Docker Format') {
       steps {
         echo "Actual format: ${env.APPLICATION_NAME}-${env.POM_VERSION}-${env.POM_PACKAGING}"
       }
-    }
+    }*/
 
     stage ('test') {
       steps {
@@ -70,6 +121,11 @@ pipeline {
     }
     
     stage ('docker build & push') {
+      when {
+        anyOf {
+          params.dockerPush == 'yes'
+        }
+      }
         steps {
             sh """
               ls -la
@@ -86,6 +142,10 @@ pipeline {
     }
 
     stage ('deploying to dev') {
+      when {
+          params.deploytoDev == 'yes'
+        }
+      
       steps {
         script {
           dockerDeploy('dev', '5761', '8761').call()
@@ -99,6 +159,10 @@ pipeline {
     
 
     stage ('deploying to test') {
+      when {
+          params.deploytoTest == 'yes'
+      }
+        
         steps {
           script{
             echo "*************entering into tst env*************"
@@ -107,6 +171,9 @@ pipeline {
 }
 }
     stage ('deploying to stage') {
+      when {
+          params.deploytoStage == 'yes'
+      }
         steps {
           script{
             dockerDeploy('stage', '7761', '8761').call()
@@ -115,6 +182,9 @@ pipeline {
 }
 
     stage ('deploying to prod') {
+      when {
+          params.deploytoProd == 'yes'
+      }
         steps {
           script{
             dockerDeploy('prod', '8761', '8761').call()
@@ -122,7 +192,7 @@ pipeline {
     }
   }
  }
-}
+
 
 
 def dockerDeploy(envDeploy, hostPort, contPort) {

@@ -286,16 +286,20 @@ def dockerDeploy(envDeploy, hostPort, contPort) {
 }
 
 def imageValidation() {
-  println ("pulling the docker image")
-  try {
-    sh "docker pull ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT}"
-  }
-  catch (Exception err) {   
+   return {
+   println ("pulling the docker image")
+   try {
+      sh "docker pull ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT}"
+    }
+    catch (Exception err) {   
       println("oops!, docker images with this tag is not available")
       buildApp().call()
       dockerBuildandPush().call()
 
   }
+    
+  }
+ 
 }
 
 def buildApp() {

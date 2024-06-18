@@ -61,7 +61,11 @@ pipeline {
         }
       }
       steps {
-        buildApp().call()
+        script {
+           buildApp().call()
+
+        }
+       
       //calling from method 
         
       }
@@ -138,7 +142,10 @@ pipeline {
         }
       }
         steps {
-          dockerBuildandPush().call()
+          script {
+            dockerBuildandPush().call()
+          }
+          
         }
     }
 
@@ -224,12 +231,14 @@ pipeline {
 //this method will build image and push to registry
 def dockerBuildandPush(){
   return {
-      echo "*********************** Build Docker Image *******************************************"
-      docker build --force-rm --no-cache --pull --rm=true --build-arg JAR_SOURCE=i27-${env.APPLICATION_NAME}-${env.POM_VERSION}.${env.POM_PACKAGING} -t ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT} ./.cicd
+      sh "echo "*********************** Build Docker Image *******************************************" "
+      sh "cp ${workspace}/target/i27-${env.APPLICATION_NAME}-${env.POM_VERSION}.${env.POM_PACKAGING} ./.cicd"
+      sh "ls -la ./.cicd"
+      sh "docker build --force-rm --no-cache --pull --rm=true --build-arg JAR_SOURCE=i27-${env.APPLICATION_NAME}-${env.POM_VERSION}.${env.POM_PACKAGING} -t ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT} ./.cicd"
       echo "*********************** Docker login *******************************************"
-      docker login -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}
+      sh "docker login -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}"
       echo "*********************** Docker push *******************************************"
-      docker push ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT}
+      sh "docker push ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT}"
   }
 }
 

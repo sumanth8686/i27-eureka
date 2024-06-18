@@ -138,17 +138,7 @@ pipeline {
         }
       }
         steps {
-            sh """
-              ls -la
-              cp ${workspace}/target/i27-${env.APPLICATION_NAME}-${env.POM_VERSION}.${env.POM_PACKAGING} ./.cicd
-              ls -la ./.cicd
-              echo "*********************** Build Docker Image *******************************************"
-              docker build --force-rm --no-cache --pull --rm=true --build-arg JAR_SOURCE=i27-${env.APPLICATION_NAME}-${env.POM_VERSION}.${env.POM_PACKAGING} -t ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT} ./.cicd
-              echo "*********************** Docker login *******************************************"
-              docker login -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}
-              echo "*********************** Docker push *******************************************"
-              docker push ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT}
-              """
+          dockerBuildandPush().call()
         }
     }
 
@@ -162,6 +152,7 @@ pipeline {
       
           steps {
             script {
+              imageValidation().call()
               dockerDeploy('dev', '5761', '8761').call()
               echo "************deployed to dev successfully***************"
 
@@ -182,6 +173,7 @@ pipeline {
         
         steps {
           script{
+            imageValidation().call()
             echo "*************entering into tst env*************"
             dockerDeploy('tst', '6761', '8761').call()
      }
@@ -195,6 +187,7 @@ pipeline {
       }
         steps {
           script{
+            imageValidation().call()
             dockerDeploy('stage', '7761', '8761').call()
     }
    }
@@ -210,6 +203,7 @@ pipeline {
       }
         steps {
           script{
+            imageValidation().call()
             dockerDeploy('prod', '8761', '8761').call()
       }
     }
@@ -229,7 +223,14 @@ pipeline {
 
 //this method will build image and push to registry
 def dockerBuildandPush(){
-  return
+  return {
+      echo "*********************** Build Docker Image *******************************************"
+      docker build --force-rm --no-cache --pull --rm=true --build-arg JAR_SOURCE=i27-${env.APPLICATION_NAME}-${env.POM_VERSION}.${env.POM_PACKAGING} -t ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT} ./.cicd
+      echo "*********************** Docker login *******************************************"
+      docker login -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}
+      echo "*********************** Docker push *******************************************"
+      docker push ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT}
+  }
 }
 
 
@@ -283,6 +284,7 @@ def imageValidation() {
   catch (exeption err) {  
       println("oops!, docker images with this tag is not available")
       buildApp().call()
+      dockerBuildandPush().call()
 
   }
 }

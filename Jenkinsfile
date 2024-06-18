@@ -264,9 +264,8 @@ def dockerDeploy(envDeploy, hostPort, contPort) {
 
 
 
-        } 
-        catch(err) {
-        echo "Caught the error: $err"
+        } catch(err) {
+          echo "Caught the error: $err"
         }
 
 
@@ -291,7 +290,7 @@ def imageValidation() {
   try {
     sh "docker pull ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT}"
   }
-  catch (exception err) {   
+  catch (Exception err) {   
       println("oops!, docker images with this tag is not available")
       buildApp().call()
       dockerBuildandPush().call()

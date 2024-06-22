@@ -210,7 +210,7 @@ pipeline {
         allOf {
             anyOf {
                 expression {
-                    params.deployToProd == 'yes'
+                    params.deploytoProd == 'yes'
                 }
             }
             anyOf {

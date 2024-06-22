@@ -32,6 +32,10 @@ pipeline {
       choices: 'no\nyes',
       description: 'this will only scan the application'
     )
+    choice(name: 'deploytoProd',
+      choices: 'no\nyes',
+      description: 'this will only scan the application'
+    )
     
   }
 
@@ -202,7 +206,7 @@ pipeline {
 
     stage ('deploying to prod') {
       when {
-        //deploy to prod == yes "and" branch should start with "release"
+        //deploy to prod == yes "and" branch should start with "release"//
         allOf {
             anyOf {
                 expression {

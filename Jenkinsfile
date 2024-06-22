@@ -202,9 +202,16 @@ pipeline {
 
     stage ('deploying to prod') {
       when {
-        expression {
-          params.deploytoProd == 'yes'
-
+        //deploy to prod == yes "and" branch should start with "release"
+        allOf {
+            anyOf {
+                expression {
+                    params.deployToProd = 'yes'
+                }
+            }
+            anyOf {
+                branch 'release/*'
+            }
         }
         
       }

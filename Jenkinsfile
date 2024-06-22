@@ -214,7 +214,7 @@ pipeline {
                 }
             }
             anyOf {
-                branch 'release/*'
+                branch = 'release/*'
             }
         }
         

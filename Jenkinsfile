@@ -206,7 +206,7 @@ pipeline {
 
     stage ('deploying to prod') {
       when {
-        //deploy to prod == yes "and" branch should start with "release"//
+        /*deploy to prod == yes "and" branch should start with "release"*/
         allOf {
             anyOf {
                 expression {
@@ -214,7 +214,7 @@ pipeline {
                 }
             }
             anyOf {
-                branch 'release/*'
+                branch = 'release/*'
             }
         }
         

@@ -42,7 +42,7 @@ pipeline {
     POM_PACKAGING = readMavenPom().getPackaging()
     DOCKER_HUB = "docker.io/sumanth9677"
     DOCKER_CREDS = credentials('sumanth9677_docker_creds')
-    SONAR_URL = "http://34.125.200.191:9000/"
+    SONAR_URL = "http://34.125.175.225:9000/"
     SONAR_TOKEN = credentials('sonar_creds')
     
   }
@@ -202,9 +202,16 @@ pipeline {
 
     stage ('deploying to prod') {
       when {
-        expression {
-          params.deploytoProd == 'yes'
-
+        //deploy to prod == yes "and" branch should start with "release"
+        allOf {
+            anyOf {
+                expression {
+                    params.deployToProd = 'yes'
+                }
+            }
+            anyOf {
+                branch 'release/*'
+            }
         }
         
       }

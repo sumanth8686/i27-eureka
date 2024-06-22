@@ -210,11 +210,11 @@ pipeline {
         allOf {
             anyOf {
                 expression {
-                    params.deployToProd = 'yes'
+                    params.deployToProd == 'yes'
                 }
             }
             anyOf {
-                branch = 'release/*'
+                branch 'release/*'
             }
         }
         
